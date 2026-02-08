@@ -188,4 +188,4 @@ function searchPlayer() {
 button.addEventListener("click", searchPlayer);
 input.addEventListener("keydown", e => {
   if (e.key === "Enter") searchPlayer();
-};
+});
