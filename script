@@ -1,0 +1,48 @@
+const players = {
+  "6": { name: "坂本 勇人", position: "内野手" },
+  "25": { name: "岡本 和真", position: "内野手" },
+  "011": { name: "冨重 英二郎", position: "投手" }
+};
+
+const input = document.getElementById("numberInput");
+const button = document.getElementById("searchBtn");
+const result = document.getElementById("result");
+
+function searchPlayer() {
+  const value = input.value.trim();
+  result.textContent = "";
+
+  if (!value) {
+    result.textContent = "入力してください";
+    return;
+  }
+
+  const padded = value.padStart(3, "0");
+  let player = players[value] || players[padded];
+  let number = value;
+
+  if (!player) {
+    for (const key in players) {
+      if (players[key].name.replace(/\s/g, "")
+        .includes(value.replace(/\s/g, ""))) {
+        player = players[key];
+        number = key;
+        break;
+      }
+    }
+  }
+
+  if (player) {
+    result.innerHTML =
+      "名前：" + player.name + "<br>" +
+      "背番号：" + number + "<br>" +
+      "ポジション：" + player.position;
+  } else {
+    result.textContent = "該当する選手がいません";
+  }
+}
+
+button.addEventListener("click", searchPlayer);
+input.addEventListener("keydown", e => {
+  if (e.key === "Enter") searchPlayer();
+});
