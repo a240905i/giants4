@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>背番号検索</title>
+</head>
+<body>
+
+  <input
+    type="text"
+    id="numberInput"
+    placeholder="背番号 or 名前を入力">
+
+  <button id="searchBtn">検索</button>
+
+  <div id="result"></div>
+
+  <script>
+    const players = {
+      "6":  { name: "坂本 勇人", position: "内野手" },
+      "25": { name: "岡本 和真", position: "内野手" },
+      "011": { name: "冨重 英二郎", position: "投手" }
+    };
+
+    const numberInput = document.getElementById("numberInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const result = document.getElementById("result");
+
+    function searchPlayer() {
+      const input = numberInput.value.trim();
+      result.innerHTML = "";
+
+      if (!input) {
+        result.textContent = "入力してください";
+        return;
+      }
+
+      const paddedInput = input.padStart(3, "0");
+      let player = players[input] || players[paddedInput];
+      let number = input;
+
+      if (!player) {
+        const foundKey = Object.keys(players).find(key =>
+          players[key].name.replace(/\s/g, "")
+            .includes(input.replace(/\s/g, ""))
+        );
+
+        if (foundKey) {
+          player = players[foundKey];
+          number = foundKey;
+        }
+      }
+
+      if (player) {
+        result.innerHTML = `
+          <p>名前：${player.name}</p>
+          <p>背番号：${number}</p>
+          <p>ポジション：${player.position}</p>
+        `;
+      } else {
+        result.textContent = "該当する選手がいません";
+      }
+    }
+
+    searchBtn.addEventListener("click", searchPlayer);
+    numberInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") searchPlayer();
+    });
+  </script>
+
+</body>
+</html>
